@@ -134,7 +134,7 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
 
 def negList(ls: Iterable[float]) -> Iterable[float]:
     "Use `map` and `neg` to negate each element in `ls`"
-    raise map(neg)(ls)
+    return map(neg)(ls)
 
 
 def zipWith(
