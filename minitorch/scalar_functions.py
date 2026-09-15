@@ -143,15 +143,15 @@ class Sigmoid(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float) -> float:
-        ctx.save_for_backward(a)
-        return operators.sigmoid(a)
+        sig = operators.sigmoid(a)
+        ctx.save_for_backward(sig)
+        return sig
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        (a,) = ctx.saved_values
-        emx = operators.exp(-a)
+        (sig,) = ctx.saved_values
 
-        return operators.inv(1 + 2.0 * emx + (emx ** 2)) * emx * d_output
+        return d_output * sig * (-sig + 1)
 
 
 class ReLU(ScalarFunction):

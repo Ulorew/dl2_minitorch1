@@ -70,7 +70,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     order = []
 
     def dfs(v: Variable):
-        if v.unique_id in used:
+        if v.unique_id in used or v.is_constant():
             return
         used.add(v.unique_id)
         for u in v.parents:
@@ -97,11 +97,10 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     d[variable.unique_id] = deriv
 
     for v in order:
-        d_in = v.chain_rule(d[v.unique_id])
-
         if v.is_leaf():
             v.accumulate_derivative(d[v.unique_id])
         else:
+            d_in = v.chain_rule(d[v.unique_id])
             for u, du in d_in:
                 d[u.unique_id] += du
 
